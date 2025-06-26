@@ -31,7 +31,7 @@ interface ResumeFormProps {
 export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProps) {
   const [enhancing, setEnhancing] = useState<string | null>(null)
 
-  const handleEnhance = async (section: string, content: string) => {
+  const handleEnhance = async (section: string, content: string, id?: string, index?: number) => {
     setEnhancing(section)
     try {
       const response = await fetch('http://localhost:8000/ai-enhance', {
@@ -44,9 +44,30 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
       
       if (response.ok) {
         const result = await response.json()
+        
+        // Update the appropriate section based on the type
         if (section === 'summary') {
           setResumeData({ ...resumeData, summary: result.enhanced_content })
+        } else if (section === 'experience' && id) {
+          setResumeData({
+            ...resumeData,
+            experience: resumeData.experience.map(exp =>
+              exp.id === id ? { ...exp, description: result.enhanced_content } : exp
+            )
+          })
+        } else if (section === 'education' && id) {
+          setResumeData({
+            ...resumeData,
+            education: resumeData.education.map(edu =>
+              edu.id === id ? { ...edu, degree: result.enhanced_content } : edu
+            )
+          })
+        } else if (section === 'skills' && index !== undefined) {
+          const newSkills = [...resumeData.skills]
+          newSkills[index] = result.enhanced_content
+          setResumeData({ ...resumeData, skills: newSkills })
         }
+        
         alert('Section enhanced successfully!')
       } else {
         alert('Failed to enhance section')
@@ -143,14 +164,14 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-semibold mb-4">Edit Resume</h2>
+      <h2 className="mb-4 text-2xl font-semibold">Edit Resume</h2>
       
       {/* Personal Information */}
       <div className="space-y-4">
-        <h3 className="text-xl font-medium">Personal Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h3 className="text-lg font-medium sm:text-xl">Personal Information</h3>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
               Name
             </label>
             <input
@@ -161,7 +182,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
               Email
             </label>
             <input
@@ -172,7 +193,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
               Phone
             </label>
             <input
@@ -187,12 +208,12 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
       {/* Summary */}
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-medium">Professional Summary</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium sm:text-xl">Professional Summary</h3>
           <button
             onClick={() => handleEnhance('summary', resumeData.summary)}
             disabled={enhancing === 'summary'}
-            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-white transition-colors bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50"
           >
             {enhancing === 'summary' ? 'Enhancing...' : 'Enhance with AI'}
           </button>
@@ -208,18 +229,18 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
       {/* Experience */}
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-medium">Work Experience</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium sm:text-xl">Work Experience</h3>
           <button
             onClick={addExperience}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="px-4 py-2 text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700"
           >
             Add Experience
           </button>
         </div>
         {resumeData.experience.map((exp, index) => (
-          <div key={exp.id} className="border border-gray-200 rounded-lg p-4 space-y-4">
-            <div className="flex justify-between items-center">
+          <div key={exp.id} className="p-4 space-y-4 border border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between">
               <h4 className="font-medium">Experience {index + 1}</h4>
               <button
                 onClick={() => removeExperience(exp.id)}
@@ -228,9 +249,9 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 Remove
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
                   Company
                 </label>
                 <input
@@ -241,7 +262,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
                   Position
                 </label>
                 <input
@@ -252,7 +273,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
                   Duration
                 </label>
                 <input
@@ -265,9 +286,18 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block mb-1 text-sm font-medium text-gray-700">
                 Description
               </label>
+              <div className="flex justify-end gap-2 mb-2">
+                <button
+                  onClick={() => handleEnhance('experience', exp.description, exp.id)}
+                  disabled={enhancing === `experience_${exp.id}`}
+                  className="px-3 py-1 text-sm text-white transition-colors bg-purple-600 rounded hover:bg-purple-700 disabled:opacity-50"
+                >
+                  {enhancing === `experience_${exp.id}` ? 'Enhancing...' : 'Enhance with AI'}
+                </button>
+              </div>
               <textarea
                 value={exp.description}
                 onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
@@ -281,18 +311,18 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
       {/* Education */}
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-medium">Education</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium sm:text-xl">Education</h3>
           <button
             onClick={addEducation}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="px-4 py-2 text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700"
           >
             Add Education
           </button>
         </div>
         {resumeData.education.map((edu, index) => (
-          <div key={edu.id} className="border border-gray-200 rounded-lg p-4 space-y-4">
-            <div className="flex justify-between items-center">
+          <div key={edu.id} className="p-4 space-y-4 border border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between">
               <h4 className="font-medium">Education {index + 1}</h4>
               <button
                 onClick={() => removeEducation(edu.id)}
@@ -301,9 +331,9 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 Remove
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
                   Institution
                 </label>
                 <input
@@ -314,7 +344,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
                   Degree
                 </label>
                 <input
@@ -325,7 +355,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
                   Year
                 </label>
                 <input
@@ -343,11 +373,11 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
 
       {/* Skills */}
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-medium">Skills</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium sm:text-xl">Skills</h3>
           <button
             onClick={addSkill}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="px-4 py-2 text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700"
           >
             Add Skill
           </button>
@@ -355,16 +385,18 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
         <div className="space-y-2">
           {resumeData.skills.map((skill, index) => (
             <div key={index} className="flex gap-2">
-              <input
-                type="text"
-                value={skill}
-                onChange={(e) => updateSkill(index, e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter a skill"
-              />
+              <div className="flex flex-1 gap-2">
+                <input
+                  type="text"
+                  value={skill}
+                  onChange={(e) => updateSkill(index, e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter a skill"
+                />
+              </div>
               <button
                 onClick={() => removeSkill(index)}
-                className="text-red-600 hover:text-red-800 px-3 py-2"
+                className="px-3 py-2 text-red-600 hover:text-red-800"
               >
                 Remove
               </button>

@@ -79,7 +79,7 @@ export default function FileUpload({ onFileUpload }: FileUploadProps) {
         />
         
         <div className="space-y-4">
-          <div className="text-6xl text-gray-400">📄</div>
+          <div className="text-5xl md:text-6xl text-gray-400">📄</div>
           <div>
             <p className="text-lg font-medium text-gray-900">
               {selectedFile ? selectedFile.name : 'Upload your resume'}

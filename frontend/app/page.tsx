@@ -85,7 +85,7 @@ export default function Home() {
   return (
     <main className="flex flex-col flex-1">
       <section className="w-full p-8 overflow-y-auto">
-        <h1 className="mb-8 text-4xl font-bold text-gray-900">
+        <h1 className="mb-8 text-2xl font-bold text-gray-900 sm:text-3xl">
           Resume Editor
         </h1>
         <ResumeEditor

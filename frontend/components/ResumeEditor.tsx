@@ -151,7 +151,7 @@ export default function ResumeEditor({ resumeData, setResumeData, activeTab, set
         <div className="lg:hidden">
           {activeTab === 'upload' && (
             <div>
-              <h2 className="mb-4 text-2xl font-semibold">Upload Resume</h2>
+              <h2 className="mb-4 text-xl font-semibold md:text-2xl">Upload Resume</h2>
               <FileUpload onFileUpload={handleFileUpload} />
             </div>
           )}
@@ -169,7 +169,7 @@ export default function ResumeEditor({ resumeData, setResumeData, activeTab, set
         <div className="hidden lg:block">
           {activeTab === 'upload' && (
             <div>
-              <h2 className="mb-4 text-2xl font-semibold">Upload Resume</h2>
+              <h2 className="mb-4 text-xl font-semibold md:text-2xl">Upload Resume</h2>
               <FileUpload onFileUpload={handleFileUpload} />
             </div>
           )}

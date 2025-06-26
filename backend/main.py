@@ -105,25 +105,88 @@ def mock_ai_enhancement(section: str, content: str) -> str:
     
     # Different enhancement strategies based on section
     if section == "summary":
-        enhanced = f"Dynamic and results-driven {content.lower()}"
+        # Enhance professional summary with more compelling language
+        enhanced = content
+        
+        # Add action words and professional language
         if "experienced" not in content.lower():
             enhanced = f"Experienced {enhanced}"
-        if len(enhanced) < 100:
-            enhanced += " with a proven track record of delivering exceptional results and driving organizational success."
+        
+        # Add quantifiable achievements if not present
+        if "5+" in content or "years" in content:
+            if "proven track record" not in content.lower():
+                enhanced += " with a proven track record of delivering high-impact solutions."
+        else:
+            enhanced += " with 5+ years of experience in web development and software engineering."
+        
+        # Add leadership/impact language
+        if "leading" not in content.lower() and "mentored" not in content.lower():
+            enhanced += " Skilled in leading development teams and mentoring junior developers."
+        
+        # Ensure it's compelling and professional
+        if len(enhanced) < 150:
+            enhanced += " Passionate about creating innovative solutions and driving business value through technology."
     
     elif section == "experience":
+        # Enhance job descriptions with action verbs and quantifiable results
         enhanced = content
-        if "developed" not in content.lower():
-            enhanced = enhanced.replace("worked on", "developed and implemented")
-        if "improved" not in content.lower():
-            enhanced = enhanced.replace("responsible for", "successfully improved")
+        
+        # Replace weak verbs with strong action verbs
+        replacements = {
+            "worked on": "developed and implemented",
+            "responsible for": "successfully managed and delivered",
+            "helped": "collaborated to deliver",
+            "did": "executed",
+            "made": "created",
+            "used": "leveraged",
+            "did work": "performed",
+            "was involved in": "played a key role in"
+        }
+        
+        for weak, strong in replacements.items():
+            if weak in enhanced.lower():
+                enhanced = enhanced.replace(weak, strong)
+        
+        # Add quantifiable results if not present
+        if "improved" in content.lower() and "%" not in content:
+            enhanced = enhanced.replace("improved", "improved by 40%")
+        
+        # Add technical depth
+        if "react" in content.lower() and "node.js" in content.lower():
+            if "full-stack" not in content.lower():
+                enhanced += " Utilized modern full-stack technologies including React, Node.js, and cloud services."
+        
+        # Add collaboration/leadership aspects
+        if "team" not in content.lower() and "collaborated" not in content.lower():
+            enhanced += " Collaborated with cross-functional teams to ensure project success."
+    
+    elif section == "education":
+        # Enhance education descriptions
+        enhanced = content
+        
+        # Add honors or achievements if it's a degree
+        if "bachelor" in content.lower() or "master" in content.lower():
+            if "honors" not in content.lower() and "gpa" not in content.lower():
+                enhanced += " (GPA: 3.8/4.0)"
+        
+        # Add relevant coursework for technical degrees
+        if "computer science" in content.lower():
+            enhanced += " - Relevant coursework: Data Structures, Algorithms, Software Engineering"
     
     elif section == "skills":
-        # For skills, just return as is since they're usually already concise
+        # Enhance skills with proficiency levels or categories
         enhanced = content
+        
+        # Add proficiency levels for technical skills
+        if any(skill in content.lower() for skill in ["javascript", "react", "python", "node.js"]):
+            enhanced += " (Advanced)"
+        elif any(skill in content.lower() for skill in ["sql", "git", "aws"]):
+            enhanced += " (Proficient)"
+        else:
+            enhanced += " (Intermediate)"
     
     else:
-        # Default enhancement
+        # Default enhancement for unknown sections
         enhanced = f"Enhanced: {content}"
     
     return enhanced
