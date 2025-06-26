@@ -45,7 +45,7 @@ export default function ResumeEditor({ resumeData, setResumeData, activeTab, set
       name: "John Doe",
       email: "john.doe@email.com",
       phone: "(555) 123-4567",
-      summary: "Experienced software developer with 5+ years of experience in web development, specializing in React, Node.js, and Python. Proven track record of delivering high-quality applications and leading development teams.",
+      summary: "Software developer with 2 years of experience in web development using React and Node.js. I have worked on delivering applications and helped with development teams.",
       experience: [
         {
           id: "exp_0",
