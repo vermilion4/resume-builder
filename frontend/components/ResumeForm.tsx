@@ -34,7 +34,8 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
   const handleEnhance = async (section: string, content: string, id?: string, index?: number) => {
     setEnhancing(section)
     try {
-      const response = await fetch('http://localhost:8000/ai-enhance', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const response = await fetch(`${apiUrl}/ai-enhance`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

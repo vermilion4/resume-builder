@@ -8,10 +8,18 @@ from datetime import datetime
 
 app = FastAPI(title="Resume Editor API", version="1.0.0")
 
+# Get CORS origins from environment variable or use defaults
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+if os.getenv("ALLOW_NETLIFY"):
+    cors_origins.extend([
+        "https://*.netlify.app",
+        "https://*.netlify.com"
+    ])
+
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
