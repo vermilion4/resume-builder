@@ -55,19 +55,7 @@ export default function ResumeForm({ resumeData, setResumeData }: ResumeFormProp
               exp.id === id ? { ...exp, description: result.enhanced_content } : exp
             )
           })
-        } else if (section === 'education' && id) {
-          setResumeData({
-            ...resumeData,
-            education: resumeData.education.map(edu =>
-              edu.id === id ? { ...edu, degree: result.enhanced_content } : edu
-            )
-          })
-        } else if (section === 'skills' && index !== undefined) {
-          const newSkills = [...resumeData.skills]
-          newSkills[index] = result.enhanced_content
-          setResumeData({ ...resumeData, skills: newSkills })
         }
-        
         alert('Section enhanced successfully!')
       } else {
         alert('Failed to enhance section')
