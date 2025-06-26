@@ -69,7 +69,7 @@ chmod +x setup.sh
 3. Activate the virtual environment:
    - Windows:
      ```bash
-     venv\Scripts\activate
+     venv/Scripts/activate
      ```
    - macOS/Linux:
      ```bash

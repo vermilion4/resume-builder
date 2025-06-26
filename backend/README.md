@@ -58,7 +58,7 @@ Save resume data
    ```
 
 2. Activate the virtual environment:
-   - Windows: `venv\Scripts\activate`
+   - Windows: `venv/Scripts/activate`
    - macOS/Linux: `source venv/bin/activate`
 
 3. Install dependencies:
