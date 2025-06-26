@@ -63,7 +63,7 @@ Save resume data
 
 3. Install dependencies:
    ```bash
-   pip install -r requirements.txt or pip install fastapi uvicorn python-multipart python-dotenv
+   pip install -r requirements.txt
    ```
 
 4. Run the server:
@@ -72,27 +72,6 @@ Save resume data
    ```
 
 5. Access the API documentation at: http://localhost:8000/docs
-
-## Troubleshooting
-
-### Windows Installation Issues
-
-If you encounter Rust compilation errors on Windows, try these solutions:
-
-
-#### Option 1: Install Pre-compiled Wheels
-```bash
-pip install --only-binary=all -r requirements.txt
-```
-
-#### Option 2: Install Visual Studio Build Tools
-1. Download Visual Studio Build Tools from Microsoft
-2. Install with "C++ build tools" workload
-3. Restart your terminal and try again
-
-
-### Common Error: "link.exe failed"
-This indicates missing C++ build tools. Use Option 1 or 2 above.
 
 ## File Structure
 
@@ -110,4 +89,3 @@ The AI enhancement endpoint uses mock logic to improve resume content:
 
 - **Summary**: Adds professional language and expands short summaries
 - **Experience**: Improves action verbs and professional terminology
-- **Skills**: Returns content as-is (already concise)
