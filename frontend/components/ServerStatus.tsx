@@ -21,7 +21,7 @@ export default function ServerStatus() {
     wakeUpAttempts: 0,
     nextCheckCountdown: config.statusCheckInterval / 1000
   })
-
+  const [isHidden, setIsHidden] = useState(false)
   const backendUrl = getBackendUrl()
 
   const checkServerStatus = useCallback(async () => {
@@ -54,7 +54,6 @@ export default function ServerStatus() {
       
       return isOnline
     } catch (error) {
-      console.log('Server status check failed:', error)
       const errorMessage = error instanceof Error ? error.message : 'Connection failed'
       setStatus(prev => ({
         ...prev,
@@ -100,18 +99,16 @@ export default function ServerStatus() {
           
           if (response.ok) {
             clearTimeout(timeoutId)
-            console.log(`Server wake-up successful via ${endpoint.url}`)
             return true
           }
         } catch (error) {
-          console.log(`Wake-up attempt failed for ${endpoint.url}:`, error)
+          console.error(`Wake-up attempt failed for ${endpoint.url}:`, error)
         }
       }
       
       clearTimeout(timeoutId)
       return false
     } catch (error) {
-      console.log('Server wake-up attempt failed:', error)
       return false
     }
   }, [backendUrl])
@@ -183,43 +180,81 @@ export default function ServerStatus() {
     checkServerStatus()
   }
 
+  const handleHideBanner = () => {
+    setIsHidden(true)
+  }
+
+  const handleShowBanner = () => {
+    setIsHidden(false)
+  }
+
+  // Floating button component
+  const FloatingStatusButton = () => (
+    <div className="fixed z-50 bottom-6 right-5">
+      <button
+        onClick={handleShowBanner}
+        className={`p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 ${
+          status.isOnline ? 'bg-green-500' : 'bg-red-500'
+        } text-white`}
+        title={`Server Status: ${getStatusText()}`}
+      >
+        <div className="flex items-center space-x-2">
+          <div className={`w-2 h-2 rounded-full ${status.isOnline ? 'bg-white' : 'bg-red-200'} animate-pulse`}></div>
+          <span className="text-xs font-medium">{getStatusText()}</span>
+        </div>
+      </button>
+    </div>
+  )
+
+  // If hidden, show floating button
+  if (isHidden) {
+    return <FloatingStatusButton />
+  }
+
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
-      <div className={`${getStatusColor()} text-white px-4 py-2 text-sm font-medium text-center transition-colors duration-300`}>
-        <div className="flex items-center justify-center space-x-2">
-          <div className={`w-2 h-2 rounded-full ${status.isOnline ? 'bg-white' : 'bg-red-200'} animate-pulse`}></div>
-          <span>{getStatusText()}</span>
-          <span className="text-xs opacity-75">•</span>
-          <span className="text-xs opacity-75">{getStatusMessage()}</span>
-          {status.lastChecked && (
-            <>
-              <span className="text-xs opacity-75">•</span>
-              <span className="text-xs opacity-75">
-                Last checked: {status.lastChecked.toLocaleTimeString()}
-              </span>
-            </>
-          )}
-          {/* {status.errorMessage && (
-            <>
-              <span className="text-xs opacity-75">•</span>
-              <span className="text-xs opacity-75">
-                Error: {status.errorMessage}
-              </span>
-            </>
-          )} */}
-          <span className="text-xs opacity-75">•</span>
-          <span className="text-xs opacity-75">
-            Next check: {formatCountdown(status.nextCheckCountdown)}
-          </span>
-          <button
-            onClick={handleManualRefresh}
-            disabled={status.isChecking}
-            className="px-2 py-1 ml-2 text-xs transition-all bg-white rounded bg-opacity-20 hover:bg-opacity-30 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {status.isChecking ? 'Checking...' : 'Refresh'}
-          </button>
+      <div className={`${getStatusColor()} text-white px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium text-center transition-colors duration-300`}>
+        <div className="flex flex-col items-center justify-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+          <div className="flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${status.isOnline ? 'bg-white' : 'bg-red-200'} animate-pulse`}></div>
+            <span>{getStatusText()}</span>
+          </div>
+
+          <div className="items-center hidden space-x-2 sm:flex">
+            <span className="text-xs opacity-75">•</span>
+            <span className="text-xs opacity-75">{getStatusMessage()}</span>
+            {status.lastChecked && (
+              <>
+                <span className="text-xs opacity-75">•</span>
+                <span className="text-xs opacity-75">
+                  Last checked: {status.lastChecked.toLocaleTimeString()}
+                </span>
+              </>
+            )}
+            <span className="text-xs opacity-75">•</span>
+            <span className="text-xs opacity-75">
+              Next check: {formatCountdown(status.nextCheckCountdown)}
+            </span>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleManualRefresh}
+              disabled={status.isChecking}
+              className="px-2 py-1 text-xs transition-all bg-white rounded bg-opacity-20 hover:bg-opacity-30 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {status.isChecking ? 'Checking...' : 'Refresh'}
+            </button>
+            <button
+              onClick={handleHideBanner}
+              className="px-2 py-1 text-xs transition-all bg-white rounded bg-opacity-20 hover:bg-opacity-30"
+              title="Hide status banner"
+            >
+              Hide
+            </button>
+          </div>
         </div>
       </div>
     </div>
   )
-} 
+}
