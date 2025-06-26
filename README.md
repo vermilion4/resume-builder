@@ -52,9 +52,8 @@ chmod +x setup.sh
 3. Configure backend URL (for production deployment):
    ```bash
    # Create .env.local file
-   echo "NEXT_PUBLIC_BACKEND_URL=https://your-render-backend-url.onrender.com" > .env.local
+   echo "NEXT_PUBLIC_API_URL=https://your-render-backend-url.onrender.com" > .env.local
    ```
-   See `setup-env.md` for detailed configuration instructions.
 
 4. Start the development server:
    ```bash
@@ -153,7 +152,7 @@ The frontend is configured for deployment on Netlify with the `netlify.toml` fil
 The backend includes a `Procfile` for Render deployment. Remember to:
 1. Set environment variables for CORS origins
 2. Configure the service to wake up on requests
-3. Update the frontend's `NEXT_PUBLIC_BACKEND_URL` environment variable
+3. Update the frontend's `NEXT_PUBLIC_API_URL` environment variable
 
 ## Technologies Used
 

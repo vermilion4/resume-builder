@@ -70,7 +70,6 @@ frontend/
 - **React 18**: UI library
 - **TypeScript**: Type safety
 - **Tailwind CSS**: Utility-first CSS framework
-- **Axios**: HTTP client for API calls
 
 ## API Integration
 
@@ -78,7 +77,6 @@ The frontend communicates with the FastAPI backend at `http://localhost:8000`:
 
 - `POST /ai-enhance`: Enhance resume sections
 - `POST /save-resume`: Save resume data
-- `GET /resumes`: Retrieve saved resumes
 
 ## Development
 
@@ -95,7 +93,7 @@ Create a `.env.local` file for environment-specific configuration:
 
 ```env
 # Backend URL - replace with your actual Render backend URL
-NEXT_PUBLIC_BACKEND_URL=https://your-render-backend-url.onrender.com
+NEXT_PUBLIC_API_URL=https://your-render-backend-url.onrender.com
 ```
 
 **Important**: Make sure to replace `your-render-backend-url.onrender.com` with your actual Render backend URL.
