@@ -1,0 +1,113 @@
+# Resume Editor Backend
+
+FastAPI backend for the Resume Editor application.
+
+## Features
+
+- **AI Enhancement**: Mock AI endpoint to enhance resume sections
+- **Resume Storage**: Save and retrieve resume data
+- **File Persistence**: Automatic saving of resumes to JSON files
+- **CORS Support**: Configured for frontend integration
+
+## API Endpoints
+
+### Base URL
+```
+http://localhost:8000
+```
+
+### Endpoints
+
+#### GET /
+Health check endpoint
+- **Response**: `{"message": "Resume Editor API is running"}`
+
+#### POST /ai-enhance
+Enhance resume sections with AI
+- **Request Body**:
+  ```json
+  {
+    "section": "summary",
+    "content": "Experienced developer..."
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "enhanced_content": "Dynamic and results-driven experienced developer..."
+  }
+  ```
+
+#### POST /save-resume
+Save resume data
+- **Request Body**: Complete resume JSON object
+- **Response**:
+  ```json
+  {
+    "message": "Resume saved successfully",
+    "resume_id": "resume_20231201_143022",
+    "timestamp": "2023-12-01T14:30:22.123456"
+  }
+  ```
+
+## Setup
+
+1. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   ```
+
+2. Activate the virtual environment:
+   - Windows: `venv\Scripts\activate`
+   - macOS/Linux: `source venv/bin/activate`
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt or pip install fastapi uvicorn python-multipart python-dotenv
+   ```
+
+4. Run the server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+5. Access the API documentation at: http://localhost:8000/docs
+
+## Troubleshooting
+
+### Windows Installation Issues
+
+If you encounter Rust compilation errors on Windows, try these solutions:
+
+
+#### Option 1: Install Pre-compiled Wheels
+```bash
+pip install --only-binary=all -r requirements.txt
+```
+
+#### Option 2: Install Visual Studio Build Tools
+1. Download Visual Studio Build Tools from Microsoft
+2. Install with "C++ build tools" workload
+3. Restart your terminal and try again
+
+
+### Common Error: "link.exe failed"
+This indicates missing C++ build tools. Use Option 1 or 2 above.
+
+## File Structure
+
+```
+backend/
+├── main.py              # FastAPI application
+├── requirements.txt     # Python dependencies
+├── README.md           # This file
+└── resumes/            # Directory for saved resume files (auto-created)
+```
+
+## Mock AI Enhancement
+
+The AI enhancement endpoint uses mock logic to improve resume content:
+
+- **Summary**: Adds professional language and expands short summaries
+- **Experience**: Improves action verbs and professional terminology
+- **Skills**: Returns content as-is (already concise)
