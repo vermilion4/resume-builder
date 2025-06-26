@@ -9,6 +9,7 @@ Next.js React application for the Resume Editor with AI enhancement capabilities
 - **AI Enhancement**: Enhance sections using AI suggestions
 - **Save & Download**: Save to backend and download as JSON
 - **Responsive Design**: Works on desktop and mobile devices
+- **Server Status Monitoring**: Real-time server status with automatic wake-up functionality
 
 ## Components
 
@@ -20,6 +21,9 @@ Handles file upload with drag & drop support for PDF and DOCX files.
 
 ### ResumeForm
 Form component for editing resume sections with AI enhancement buttons.
+
+### ServerStatus
+Displays real-time server status and automatically pings the server to keep it awake.
 
 ## Setup
 
@@ -90,8 +94,26 @@ The frontend communicates with the FastAPI backend at `http://localhost:8000`:
 Create a `.env.local` file for environment-specific configuration:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
+# Backend URL - replace with your actual Render backend URL
+NEXT_PUBLIC_BACKEND_URL=https://your-render-backend-url.onrender.com
 ```
+
+**Important**: Make sure to replace `your-render-backend-url.onrender.com` with your actual Render backend URL.
+
+## Server Status Monitoring
+
+The application includes a server status monitoring system that:
+
+- Displays a status banner at the top of the page
+- Shows real-time server status (Online/Offline/Checking)
+- Automatically pings the server every 30 seconds to keep it awake
+- Attempts to wake up sleeping servers with API calls
+- Provides visual feedback about server availability
+
+The status banner will show:
+- 🟢 **Green**: Server is online and ready
+- 🔴 **Red**: Server is offline or sleeping
+- 🟡 **Yellow**: Checking server status
 
 ## Styling
 

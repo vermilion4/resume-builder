@@ -62,6 +62,17 @@ resume_storage: Dict[str, Any] = {}
 async def root():
     return {"message": "Resume Editor API is running"}
 
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint for server status monitoring
+    """
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "message": "Server is running"
+    }
+
 @app.post("/ai-enhance", response_model=AIEnhanceResponse)
 async def enhance_with_ai(request: AIEnhanceRequest):
     """

@@ -22,6 +22,17 @@ http://localhost:8000
 Health check endpoint
 - **Response**: `{"message": "Resume Editor API is running"}`
 
+#### GET /health
+Server health check endpoint for status monitoring
+- **Response**:
+  ```json
+  {
+    "status": "healthy",
+    "timestamp": "2023-12-01T14:30:22.123456",
+    "message": "Server is running"
+  }
+  ```
+
 #### POST /ai-enhance
 Enhance resume sections with AI
 - **Request Body**:
