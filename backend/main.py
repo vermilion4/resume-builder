@@ -168,31 +168,6 @@ def mock_ai_enhancement(section: str, content: str) -> str:
         if "team" not in content.lower() and "collaborated" not in content.lower():
             enhanced += " Collaborated with cross-functional teams to ensure project success."
     
-    elif section == "education":
-        # Enhance education descriptions
-        enhanced = content
-        
-        # Add honors or achievements if it's a degree
-        if "bachelor" in content.lower() or "master" in content.lower():
-            if "honors" not in content.lower() and "gpa" not in content.lower():
-                enhanced += " (GPA: 3.8/4.0)"
-        
-        # Add relevant coursework for technical degrees
-        if "computer science" in content.lower():
-            enhanced += " - Relevant coursework: Data Structures, Algorithms, Software Engineering"
-    
-    elif section == "skills":
-        # Enhance skills with proficiency levels or categories
-        enhanced = content
-        
-        # Add proficiency levels for technical skills
-        if any(skill in content.lower() for skill in ["javascript", "react", "python", "node.js"]):
-            enhanced += " (Advanced)"
-        elif any(skill in content.lower() for skill in ["sql", "git", "aws"]):
-            enhanced += " (Proficient)"
-        else:
-            enhanced += " (Intermediate)"
-    
     else:
         # Default enhancement for unknown sections
         enhanced = f"Enhanced: {content}"
